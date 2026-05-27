@@ -305,38 +305,49 @@ st.markdown(f"""
 # DATOS (Carga dinámica de outputs con fallback robusto)
 # =========================================================
 def find_data_file(filename):
-    cwd = Path.cwd()
-    # 1. Check relative common locations without special characters
-    for p in [cwd, Path(".."), Path("../..")]:
-        for r in [
-            p / "outputs" / filename,
-            p / "Trabajo 2.2" / "outputs" / filename,
-            p / filename
-        ]:
-            try:
-                if r.exists():
-                    return r.resolve()
-            except:
-                pass
-    # 2. Check SCRIPT_DIR
+    import os
+    # 1. Simple relative string paths (highly immune to non-ASCII encoding issues in parent directory names)
+    posibles = [
+        f"outputs/{filename}",
+        f"Trabajo 2.2/outputs/{filename}",
+        filename,
+        f"../outputs/{filename}",
+        f"../Trabajo 2.2/outputs/{filename}",
+        f"../../outputs/{filename}",
+        f"../../Trabajo 2.2/outputs/{filename}"
+    ]
+    for p in posibles:
+        try:
+            if os.path.exists(p):
+                return os.path.abspath(p)
+        except:
+            pass
+            
+    # 2. Path-based resolution
     try:
+        from pathlib import Path
+        cwd = Path.cwd()
+        for p in [cwd, Path(".."), Path("../..")]:
+            for r in [
+                p / "outputs" / filename,
+                p / "Trabajo 2.2" / "outputs" / filename,
+                p / filename
+            ]:
+                if r.exists():
+                    return str(r.resolve())
+    except:
+        pass
+        
+    # 3. SCRIPT_DIR fallback
+    try:
+        from pathlib import Path
         script_dir = Path(__file__).parent.resolve()
         r = script_dir / "outputs" / filename
         if r.exists():
-            return r
+            return str(r.resolve())
     except:
         pass
-    # 3. Upward search
-    curr = cwd
-    for _ in range(4):
-        try:
-            if (curr / "outputs" / filename).exists():
-                return (curr / "outputs" / filename).resolve()
-            if (curr / "Trabajo 2.2" / "outputs" / filename).exists():
-                return (curr / "Trabajo 2.2" / "outputs" / filename).resolve()
-        except:
-            pass
-        curr = curr.parent
+        
     return None
 
 clientes_path = find_data_file("clientes_segmentados.csv")
@@ -486,6 +497,14 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**Marketing · Grupo 26**")
     st.markdown("Prof. Juan Carlos Caro · 2026-1")
+    
+    with st.expander("🔍 Debug de Datos"):
+        import os
+        st.write(f"CWD: `{os.getcwd()}`")
+        st.write(f"clientes_path: `{clientes_path}`")
+        st.write(f"afinidad_path: `{afinidad_path}`")
+        st.write(f"clientes exists: `{os.path.exists(clientes_path) if clientes_path else False}`")
+        st.write(f"afinidad exists: `{os.path.exists(afinidad_path) if afinidad_path else False}`")
 
 slide = st.session_state.slide
 
