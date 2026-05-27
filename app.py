@@ -598,7 +598,7 @@ elif slide == 1:
     with col2:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-value'>~15k</div>
+            <div class='metric-value'>~15.000</div>
             <div class='metric-label'>Clientes únicos</div>
         </div>
         <div class='metric-card'>
@@ -661,7 +661,7 @@ elif slide == 3:
     with col1:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-value'>150.000 → 15k</div>
+            <div class='metric-value'>150.000 → 15.000</div>
             <div class='metric-label'>Agregación transacción → cliente</div>
         </div>
         """, unsafe_allow_html=True)
@@ -684,7 +684,7 @@ elif slide == 3:
     st.markdown("""
     ### Transformaciones aplicadas
 
-    1. **Agregación por `customer_id`** — De ~150.000 registros transaccionales a ~15k clientes únicos.
+    1. **Agregación por `customer_id`** — De ~150.000 registros transaccionales a ~15.000 clientes únicos.
     2. **Construcción de RFM** — Recency desde la última orden, Frequency y Monetary acumulados.
     3. **Canal modal por cliente** — `order_channel` se reduce a su moda individual.
     4. **Variables sociodemográficas estables** — Se toma el primer registro (no cambian dentro del cliente).
