@@ -302,14 +302,48 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 # =========================================================
-# DATOS (Carga dinámica de outputs con fallback hardcoded)
+# DATOS (Carga dinámica de outputs con fallback robusto)
 # =========================================================
-SCRIPT_DIR = Path(__file__).parent.resolve()
-clientes_path = SCRIPT_DIR / "outputs" / "clientes_segmentados.csv"
-afinidad_path = SCRIPT_DIR / "outputs" / "tabla_afinidad.csv"
+def find_data_file(filename):
+    cwd = Path.cwd()
+    # 1. Check relative common locations without special characters
+    for p in [cwd, Path(".."), Path("../..")]:
+        for r in [
+            p / "outputs" / filename,
+            p / "Trabajo 2.2" / "outputs" / filename,
+            p / filename
+        ]:
+            try:
+                if r.exists():
+                    return r.resolve()
+            except:
+                pass
+    # 2. Check SCRIPT_DIR
+    try:
+        script_dir = Path(__file__).parent.resolve()
+        r = script_dir / "outputs" / filename
+        if r.exists():
+            return r
+    except:
+        pass
+    # 3. Upward search
+    curr = cwd
+    for _ in range(4):
+        try:
+            if (curr / "outputs" / filename).exists():
+                return (curr / "outputs" / filename).resolve()
+            if (curr / "Trabajo 2.2" / "outputs" / filename).exists():
+                return (curr / "Trabajo 2.2" / "outputs" / filename).resolve()
+        except:
+            pass
+        curr = curr.parent
+    return None
 
-if clientes_path.exists() and afinidad_path.exists():
-    # Carga dinámica desde los archivos exportados por el Notebook Trabajo2_Starbucks_FINAL_2.ipynb
+clientes_path = find_data_file("clientes_segmentados.csv")
+afinidad_path = find_data_file("tabla_afinidad.csv")
+
+if clientes_path and afinidad_path:
+    # Carga dinámica desde los archivos exportados por el Notebook
     df_clientes = pd.read_csv(clientes_path)
     
     # Reconstrucción de perfiles RFM
@@ -892,17 +926,8 @@ elif slide == 9:
         ]
     )
     
-    # Búsqueda robusta de la ruta del archivo para evitar fallos de ejecución en distintas carpetas de trabajo
-    posibles_rutas = [
-        SCRIPT_DIR / "outputs" / "clientes_segmentados.csv",
-        Path("outputs/clientes_segmentados.csv"),
-        Path("Trabajo 2.2/outputs/clientes_segmentados.csv"),
-    ]
-    data_path = None
-    for r in posibles_rutas:
-        if r.exists():
-            data_path = r
-            break
+    # Búsqueda robusta de la ruta del archivo
+    data_path = find_data_file("clientes_segmentados.csv")
             
     if data_path is None:
         st.warning("⚠️ Los archivos de datos complementarios no están generados en `/outputs`. Asegúrate de que el notebook se haya ejecutado por completo.")
