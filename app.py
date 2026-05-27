@@ -661,7 +661,7 @@ elif slide == 3:
     with col1:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-value'>150.000 → 15.000</div>
+            <div class='metric-value' style='font-size: 1.7rem;'>150.000 → 15.000</div>
             <div class='metric-label'>Agregación transacción → cliente</div>
         </div>
         """, unsafe_allow_html=True)
