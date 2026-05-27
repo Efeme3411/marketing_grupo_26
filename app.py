@@ -1159,9 +1159,9 @@ elif slide == 9:
                 font=dict(family="Inter, sans-serif", color=NEUTRAL_DARK),
                 height=600,
                 scene=dict(
-                    xaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(0,0,0,0.08)", tickfont=dict(color=NEUTRAL_DARK), titlefont=dict(color=NEUTRAL_DARK)),
-                    yaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(0,0,0,0.08)", tickfont=dict(color=NEUTRAL_DARK), titlefont=dict(color=NEUTRAL_DARK)),
-                    zaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(0,0,0,0.08)", tickfont=dict(color=NEUTRAL_DARK), titlefont=dict(color=NEUTRAL_DARK)),
+                    xaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(0,0,0,0.08)", tickfont=dict(color=NEUTRAL_DARK), title=dict(font=dict(color=NEUTRAL_DARK))),
+                    yaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(0,0,0,0.08)", tickfont=dict(color=NEUTRAL_DARK), title=dict(font=dict(color=NEUTRAL_DARK))),
+                    zaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(0,0,0,0.08)", tickfont=dict(color=NEUTRAL_DARK), title=dict(font=dict(color=NEUTRAL_DARK))),
                 ),
                 margin=dict(l=0, r=0, b=0, t=30),
                 legend=dict(orientation="h", yanchor="bottom", y=-0.1, xanchor="center", x=0.5)
