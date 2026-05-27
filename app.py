@@ -306,15 +306,61 @@ st.markdown(f"""
 # =========================================================
 def find_data_file(filename):
     import os
-    # 1. Simple relative string paths (highly immune to non-ASCII encoding issues in parent directory names)
+    cwd = os.getcwd()
+    
+    # Helper to find a path case-insensitively
+    def resolve_case_insensitive(base_path, parts):
+        current = base_path
+        for part in parts:
+            if not os.path.exists(current):
+                return None
+            try:
+                children = os.listdir(current)
+                matched = None
+                for child in children:
+                    if child.lower() == part.lower():
+                        matched = child
+                        break
+                if matched is None:
+                    return None
+                current = os.path.join(current, matched)
+            except:
+                return None
+        return current
+
+    # We try checking CWD, script directory, and parent directory
+    try:
+        script_dir = os.path.abspath(os.path.dirname(__file__))
+    except:
+        script_dir = cwd
+        
+    for base in [cwd, script_dir, os.path.dirname(script_dir)]:
+        # 1. Check outputs/filename
+        res = resolve_case_insensitive(base, ["outputs", filename])
+        if res:
+            return res
+        # 2. Check Trabajo 2.2/outputs/filename
+        res = resolve_case_insensitive(base, ["Trabajo 2.2", "outputs", filename])
+        if res:
+            return res
+        # 3. Check filename directly
+        res = resolve_case_insensitive(base, [filename])
+        if res:
+            return res
+
+    # 4. Standard fallback using relative paths (case sensitive & insensitive)
     posibles = [
         f"outputs/{filename}",
+        f"Outputs/{filename}",
         f"Trabajo 2.2/outputs/{filename}",
+        f"Trabajo 2.2/Outputs/{filename}",
         filename,
         f"../outputs/{filename}",
+        f"../Outputs/{filename}",
         f"../Trabajo 2.2/outputs/{filename}",
+        f"../Trabajo 2.2/Outputs/{filename}",
         f"../../outputs/{filename}",
-        f"../../Trabajo 2.2/outputs/{filename}"
+        f"../../Outputs/{filename}"
     ]
     for p in posibles:
         try:
@@ -322,32 +368,7 @@ def find_data_file(filename):
                 return os.path.abspath(p)
         except:
             pass
-            
-    # 2. Path-based resolution
-    try:
-        from pathlib import Path
-        cwd = Path.cwd()
-        for p in [cwd, Path(".."), Path("../..")]:
-            for r in [
-                p / "outputs" / filename,
-                p / "Trabajo 2.2" / "outputs" / filename,
-                p / filename
-            ]:
-                if r.exists():
-                    return str(r.resolve())
-    except:
-        pass
-        
-    # 3. SCRIPT_DIR fallback
-    try:
-        from pathlib import Path
-        script_dir = Path(__file__).parent.resolve()
-        r = script_dir / "outputs" / filename
-        if r.exists():
-            return str(r.resolve())
-    except:
-        pass
-        
+
     return None
 
 clientes_path = find_data_file("clientes_segmentados.csv")
@@ -949,7 +970,21 @@ elif slide == 9:
     data_path = find_data_file("clientes_segmentados.csv")
             
     if data_path is None:
-        st.warning("⚠️ Los archivos de datos complementarios no están generados en `/outputs`. Asegúrate de que el notebook se haya ejecutado por completo.")
+        st.warning("⚠️ Los archivos de datos complementarios no están generados en `/outputs`. Asegúrate de que el notebook se haya ejecutado por completo y que la carpeta `/outputs` con los archivos CSV esté subida a tu repositorio de GitHub.")
+        with st.expander("📁 Estructura de archivos en GitHub (Diagnóstico)"):
+            import os
+            st.write(f"Directorio de ejecución (CWD): `{os.getcwd()}`")
+            try:
+                st.write("Archivos en la raíz del repositorio:")
+                st.code("\n".join(os.listdir(".")))
+                
+                # Check common subfolders
+                for folder in ["Trabajo 2.2", "..", "../Trabajo 2.2"]:
+                    if os.path.exists(folder) and os.path.isdir(folder):
+                        st.write(f"Archivos en `{folder}`:")
+                        st.code("\n".join(os.listdir(folder)))
+            except Exception as e:
+                st.write(f"Error de diagnóstico: {e}")
     else:
         df_clientes = pd.read_csv(data_path)
         
