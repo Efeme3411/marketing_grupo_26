@@ -535,20 +535,20 @@ slide = st.session_state.slide
 if slide == 0:
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown(f"""
-    <div style='text-align:center; padding: 2rem;'>
-        <p style='color:{GREEN_LIGHT}; font-weight: 700; letter-spacing: 4px; font-size: 0.95rem; margin-bottom: 0;'>
+    <div style='text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 2rem;'>
+        <p style='color:{GREEN_LIGHT}; font-weight: 700; letter-spacing: 4px; font-size: 0.95rem; margin-bottom: 0; text-align: center; width: 100%;'>
             MERCADO 2 · STARBUCKS AMÉRICA
         </p>
-        <h1 style='font-size: 3.8rem; line-height: 1.1; margin: 1rem 0;'>
+        <h1 style='font-size: 3.8rem; line-height: 1.1; margin: 1rem 0; text-align: center; width: 100%; color: {GREEN_DARK} !important;'>
             Segmentación,<br>Mercados Meta<br>y Posicionamiento
         </h1>
-        <p style='font-size: 1.15rem; color: {NEUTRAL_DARK}; max-width: 600px; margin: 1.5rem auto;'>
+        <p style='font-size: 1.15rem; color: {NEUTRAL_DARK}; max-width: 600px; margin: 1.5rem auto; text-align: center; width: 100%;'>
             Análisis estratégico de marketing para orientar la decisión de apertura
             de nuevas franquicias en Estados Unidos.
         </p>
         <br>
         <hr style='max-width: 200px; margin: 2rem auto;'>
-        <p class='footer-portada'>
+        <p class='footer-portada' style='text-align: center; width: 100%; color: {NEUTRAL_DARK};'>
             Universidad de Concepción · Facultad de Ingeniería<br>
             Departamento de Ingeniería Industrial<br>
             Asignatura: Marketing · Grupo 26 · 2026-1<br>
