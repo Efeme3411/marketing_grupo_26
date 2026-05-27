@@ -98,6 +98,13 @@ st.markdown(f"""
         color: {NEUTRAL_LIGHT} !important;
     }}
     
+    /* Main body widget labels and text overrides to guarantee visibility in system dark mode */
+    [data-testid="stMain"] label,
+    [data-testid="stMain"] [data-testid="stWidgetLabel"] p,
+    [data-testid="stMain"] [data-testid="stWidgetLabel"] span {{
+        color: {NEUTRAL_DARK} !important;
+    }}
+    
     section[data-testid="stSidebar"] hr {{
         border-color: rgba(255, 255, 255, 0.1) !important;
     }}
@@ -533,29 +540,31 @@ slide = st.session_state.slide
 # SLIDE 0 — PORTADA
 # =========================================================
 if slide == 0:
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f"""
-    <div style='text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 2rem;'>
-        <p style='color:{GREEN_LIGHT}; font-weight: 700; letter-spacing: 4px; font-size: 0.95rem; margin-bottom: 0; text-align: center; width: 100%;'>
-            MERCADO 2 · STARBUCKS AMÉRICA
-        </p>
-        <h1 style='font-size: 3.8rem; line-height: 1.1; margin: 1rem 0; text-align: center; width: 100%; color: {GREEN_DARK} !important;'>
-            Segmentación,<br>Mercados Meta<br>y Posicionamiento
-        </h1>
-        <p style='font-size: 1.15rem; color: {NEUTRAL_DARK}; max-width: 600px; margin: 1.5rem auto; text-align: center; width: 100%;'>
-            Análisis estratégico de marketing para orientar la decisión de apertura
-            de nuevas franquicias en Estados Unidos.
-        </p>
-        <br>
-        <hr style='max-width: 200px; margin: 2rem auto;'>
-        <p class='footer-portada' style='text-align: center; width: 100%; color: {NEUTRAL_DARK};'>
-            Universidad de Concepción · Facultad de Ingeniería<br>
-            Departamento de Ingeniería Industrial<br>
-            Asignatura: Marketing · Grupo 26 · 2026-1<br>
-            Profesor: Juan Carlos Caro
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    _, center_col, _ = st.columns([1, 8, 1])
+    with center_col:
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        st.markdown(f"""
+        <div style='text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 2rem;'>
+            <p style='color:{GREEN_LIGHT}; font-weight: 700; letter-spacing: 4px; font-size: 0.95rem; margin-bottom: 0; text-align: center !important; width: 100%;'>
+                MERCADO 2 · STARBUCKS AMÉRICA
+            </p>
+            <h1 style='font-size: 3.8rem; line-height: 1.1; margin: 1rem 0; text-align: center !important; width: 100%; color: {GREEN_DARK} !important;'>
+                Segmentación,<br>Mercados Meta<br>y Posicionamiento
+            </h1>
+            <p style='font-size: 1.15rem; color: {NEUTRAL_DARK}; max-width: 600px; margin: 1.5rem auto; text-align: center !important; width: 100%;'>
+                Análisis estratégico de marketing para orientar la decisión de apertura
+                de nuevas franquicias en Estados Unidos.
+            </p>
+            <br>
+            <hr style='max-width: 200px; margin: 2rem auto;'>
+            <p class='footer-portada' style='text-align: center !important; width: 100%; color: {NEUTRAL_DARK};'>
+                Universidad de Concepción · Facultad de Ingeniería<br>
+                Departamento de Ingeniería Industrial<br>
+                Asignatura: Marketing · Grupo 26 · 2026-1<br>
+                Profesor: Juan Carlos Caro
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # =========================================================
 # SLIDE 1 — CONTEXTO
@@ -589,11 +598,11 @@ elif slide == 1:
     with col2:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-value'>~15K</div>
+            <div class='metric-value'>~15k</div>
             <div class='metric-label'>Clientes únicos</div>
         </div>
         <div class='metric-card'>
-            <div class='metric-value'>~150K</div>
+            <div class='metric-value'>~150.000</div>
             <div class='metric-label'>Órdenes transaccionales</div>
         </div>
         <div class='metric-card'>
@@ -652,7 +661,7 @@ elif slide == 3:
     with col1:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-value'>150K → 15K</div>
+            <div class='metric-value'>150.000 → 15k</div>
             <div class='metric-label'>Agregación transacción → cliente</div>
         </div>
         """, unsafe_allow_html=True)
@@ -675,7 +684,7 @@ elif slide == 3:
     st.markdown("""
     ### Transformaciones aplicadas
 
-    1. **Agregación por `customer_id`** — De ~150K registros transaccionales a ~15K clientes únicos.
+    1. **Agregación por `customer_id`** — De ~150.000 registros transaccionales a ~15k clientes únicos.
     2. **Construcción de RFM** — Recency desde la última orden, Frequency y Monetary acumulados.
     3. **Canal modal por cliente** — `order_channel` se reduce a su moda individual.
     4. **Variables sociodemográficas estables** — Se toma el primer registro (no cambian dentro del cliente).
@@ -851,7 +860,7 @@ elif slide == 6:
     #### Justificación de la elección de método
 
     - **5 de 6 variables son categóricas nominales:** LCA es el método nativo, sin necesidad de one-hot.
-    - **Entropía relativa = 0.553:** clasificación moderada-buena, refleja solapamiento real esperado en
+    - **Entropía relativa = 0,553:** clasificación moderada-buena, refleja solapamiento real esperado en
       datos sociodemográficos de consumidores.
     - **ΔBIC entre K=2 y K=3 marginal:** se prefiere K=3 por riqueza interpretativa.
     """)
@@ -884,7 +893,7 @@ elif slide == 7:
             <ul>
                 <li>Nativo para categóricas nominales</li>
                 <li>El Silhouette de K-Means se calcula en espacio dummy → comparación sesgada</li>
-                <li>Entropía 0.553 indica clasificación realista</li>
+                <li>Entropía 0,553 indica clasificación realista</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -896,8 +905,8 @@ elif slide == 7:
             <h3>✅ K-Means (RFM)</h3>
             <ul>
                 <li>Espacio euclidiano apropiado para 3 variables continuas</li>
-                <li>Silhouette 0.385 vs 0.337 (LCA): superior y comparación justa</li>
-                <li>Davies-Bouldin 0.887 (&lt;1): buena separación absoluta</li>
+                <li>Silhouette 0,385 vs 0,337 (LCA): superior y comparación justa</li>
+                <li>Davies-Bouldin 0,887 (&lt;1): buena separación absoluta</li>
                 <li>Convergencia limpia, sin warnings</li>
             </ul>
         </div>
@@ -1087,7 +1096,7 @@ elif slide == 9:
                     r=valores,
                     theta=etiquetas_radar + [etiquetas_radar[0]],
                     fill='toself',
-                    name=f'{seg} (n={perfil.loc[seg, "N"]:.0f})',
+                    name=f'{seg} (n={perfil.loc[seg, "N"]:,.0f})'.replace(",", "."),
                     line=dict(color=colores_radar[i], width=2.5)
                 ))
                 
@@ -1128,7 +1137,7 @@ elif slide == 9:
                 color='Nombre_RFM',
                 color_discrete_map=PALETA_RFM,
                 opacity=0.5,
-                title='Espacio 3D de Clientes Starbucks (Muestra de 5,000 clientes)',
+                title='Espacio 3D de Clientes Starbucks (Muestra de 5.000 clientes)',
                 labels={'Nombre_RFM': 'Segmento RFM', 'Recency': 'Recency (días)', 'Frequency': 'Frequency (compras)', 'Monetary': 'Monetary ($)'}
             )
             
@@ -1174,7 +1183,7 @@ elif slide == 9:
 # =========================================================
 elif slide == 10:
     st.title("Identificación de Mercados Meta")
-    st.markdown("Aplicación de los **cuatro criterios STP** (Kotler) sobre los 9 segmentos.")
+    st.markdown("Selección de los segmentos con mayor potencial de valor y viabilidad operativa.")
 
 
 
@@ -1189,7 +1198,7 @@ elif slide == 10:
             <span class='badge'>⭐ Meta Principal</span>
             <h3>Jóvenes Digitales · Regulares Activos</h3>
             <p style='font-size:0.9rem; color:{NEUTRAL_DARK};'>
-            28% del mercado · 5.5 compras/cliente · $84 ticket medio
+            28% del mercado · 5,5 compras/cliente · $84 ticket medio
             </p>
             <p>El cliente más frecuente del mercado. Volumen sostén del negocio.</p>
         </div>
@@ -1201,7 +1210,7 @@ elif slide == 10:
             <span class='badge gold'>⭐ Meta Principal</span>
             <h3>Jóvenes Digitales · Leales Premium</h3>
             <p style='font-size:0.9rem; color:{NEUTRAL_DARK};'>
-            23% del mercado · 9.3 compras/cliente · $147 ticket medio
+            23% del mercado · 9,3 compras/cliente · $147 ticket medio
             </p>
             <p>Núcleo de valor. Frecuencia alta y personalización elevada.</p>
         </div>
